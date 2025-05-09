@@ -1,27 +1,28 @@
-version: '3.9'
-
 services:
   db:
     image: postgres:12
-    environment:
-      POSTGRES_DB: hw02
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 567234
-    ports:
-      - "5432:5432"
+    container_name: postgres-db
+    restart: always
+    env_file:
+      - .env
     volumes:
-      - ./postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT}:5432"
 
   web:
     build: .
-    depends_on:
-      - db
-    ports:
-      - "8000:8000"
-    environment:
-      PORT: 8000
+    container_name: fastapi-app
+    command: >
+      uvicorn main:app --host 0.0.0.0 --port ${PORT} --reload
     volumes:
       - .:/app
+    ports:
+      - "${PORT}:${PORT}"
+    depends_on:
+      - db
+    env_file:
+      - .env
 
 volumes:
   postgres_data:

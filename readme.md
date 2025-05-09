@@ -11,7 +11,3 @@ pip install -r requirements.txt
 ```bash 
 python main.py
 ```
-
-![alt text](screenshots/screen1.png)
-
-![alt text](screenshots/screen2.png)
